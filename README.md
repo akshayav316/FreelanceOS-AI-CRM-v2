@@ -1,28 +1,85 @@
 # 🤖 FreelanceOS AI CRM v2
 
-> **An AI-powered CRM automation platform built with n8n, Gemini AI, Gmail, Google Sheets, and Telegram to automate lead management, follow-ups, business insights, and AI-powered CRM assistance.**
-
-![License](https://img.shields.io/badge/License-MIT-green)
-![n8n](https://img.shields.io/badge/Built%20With-n8n-orange)
+![MIT License](https://img.shields.io/badge/License-MIT-green.svg)
+![Built with n8n](https://img.shields.io/badge/Built%20With-n8n-orange)
 ![Gemini](https://img.shields.io/badge/AI-Gemini%202.0%20Flash-blue)
 ![Status](https://img.shields.io/badge/Status-Completed-success)
+![Maintained](https://img.shields.io/badge/Maintained-Yes-brightgreen)
+
+> **An AI-powered CRM Automation Platform that manages client leads, automates follow-ups, generates business insights, and provides an intelligent CRM Copilot using n8n, Gemini AI, Gmail, Google Sheets, and Telegram.**
 
 ---
 
-# 📖 Overview
+# 🚀 Overview
 
-FreelanceOS AI CRM v2 is a complete AI-powered Customer Relationship Management (CRM) automation system designed for freelancers and small businesses.
+FreelanceOS AI CRM v2 is the second and final evolution of the FreelanceOS AI CRM project.
 
-Instead of manually managing client emails, follow-ups, CRM entries, and business reports, this project automates the entire workflow using AI.
+While Version 1 automated client email analysis and follow-up management, Version 2 expands the platform into a complete AI-powered CRM ecosystem consisting of four integrated automation workflows.
 
-The platform consists of **four integrated workflows**:
+The platform can:
 
-- 📥 AI Lead Processing Pipeline
-- 📅 AI Follow-up Automation
-- 📊 AI Dashboard & Business Insights
-- 🤖 AI CRM Copilot (RAG)
+- Analyze incoming client inquiries using AI
+- Detect duplicate CRM entries
+- Score and categorize business opportunities
+- Schedule automated follow-ups
+- Generate professional Gmail draft replies
+- Send Telegram notifications
+- Generate AI-powered business insights
+- Answer CRM questions using an AI Copilot (RAG)
 
-Together, these workflows help businesses save time, organize leads, improve client communication, and gain actionable business insights.
+The goal of this project is to reduce repetitive manual work while helping freelancers and small businesses manage client relationships more efficiently.
+
+---
+
+# 🚀 Evolution from Version 1
+
+FreelanceOS AI CRM began as an AI workflow that automated email analysis and follow-up reminders.
+
+Version 2 significantly expands the original project by introducing several new capabilities.
+
+### ✅ Version 1
+
+- AI Email Analysis
+- Gmail Draft Generation
+- Google Sheets CRM
+- Follow-up Automation
+
+### 🚀 Version 2
+
+- AI Lead Processing Pipeline
+- Duplicate Lead Detection
+- AI Dashboard & Business Insights
+- Executive Business Reports
+- Telegram Notifications
+- AI CRM Copilot (RAG)
+- Natural Language CRM Search
+- Sales Recommendations
+- Business Risk Analysis
+
+Version 2 transforms FreelanceOS AI CRM from a simple workflow automation into a complete AI-powered CRM platform.
+
+---
+
+# ❗ Problem
+
+Freelancers often receive numerous client inquiries across email.
+
+Managing these conversations manually leads to:
+
+- Missed follow-ups
+- Duplicate client records
+- Slow response times
+- Poor lead organization
+- Lack of business insights
+- Difficulty tracking high-value opportunities
+
+---
+
+# 💡 Solution
+
+FreelanceOS AI CRM v2 automates the complete client management process.
+
+Incoming emails are analyzed using AI, business information is extracted, duplicate records are detected, leads are categorized, follow-ups are scheduled automatically, Gmail draft replies are generated, Telegram alerts are sent, business reports are created, and an AI Copilot allows users to query CRM data using natural language.
 
 ---
 
@@ -31,18 +88,15 @@ Together, these workflows help businesses save time, organize leads, improve cli
 ## 📥 AI Lead Processing Pipeline
 
 - Reads incoming Gmail inquiries
-- Detects duplicate CRM entries
-- Uses Gemini AI to analyze lead quality
-- Calculates:
-  - Priority
-  - Lead Temperature
-  - Opportunity Score
-  - Sentiment
-  - Project Category
-- Stores leads in Google Sheets
-- Automatically schedules follow-ups
-- Generates Gmail reply drafts
-- Sends Telegram notifications
+- AI-powered lead analysis
+- Duplicate lead detection
+- Business opportunity scoring
+- Lead temperature classification
+- Client information extraction
+- Automatic CRM updates
+- Follow-up scheduling
+- Gmail draft generation
+- Telegram notifications
 
 ---
 
@@ -50,77 +104,45 @@ Together, these workflows help businesses save time, organize leads, improve cli
 
 Runs automatically every day.
 
-Features:
+Features include:
 
-- Checks pending follow-ups
-- Verifies due dates
+- Reads pending follow-ups
+- Checks follow-up due dates
 - Generates Gmail reply drafts
 - Updates follow-up status
-- Prevents missed client communications
+- Prevents missed client communication
 
 ---
 
 ## 📊 AI Dashboard & Business Insights
 
-Automatically analyzes CRM data and generates:
+Automatically generates business analytics including:
 
 - Executive Summary
 - Business Risks
 - AI Recommendations
 - Lead Distribution
-- Conversion Metrics
-- Follow-up Analytics
+- Lead Statistics
+- Follow-up Metrics
+- Potential Revenue Analysis
 
-Results are stored in Google Sheets for reporting.
+All insights are stored inside Google Sheets.
 
 ---
 
 ## 🤖 AI CRM Copilot (RAG)
 
-Natural language CRM assistant capable of answering questions like:
+Natural language assistant capable of answering CRM questions.
+
+Examples include:
 
 - Who has the highest opportunity score?
-- Which clients requested meetings?
 - Give today's CRM summary.
-- What recommendations improve sales?
+- Which clients requested meetings?
 - Who needs follow-up tomorrow?
+- What are your recommendations to improve sales?
 
-The chatbot retrieves CRM records and AI Insights before generating intelligent responses.
-
----
-
-# 🏗️ System Architecture
-
-```
-                Gmail
-                  │
-                  ▼
-        AI Lead Processing
-                  │
-      ┌───────────┴────────────┐
-      ▼                        ▼
-Duplicate Lead          New Lead
-      │                        │
-Update Record         Create CRM Entry
-                               │
-                               ▼
-                     Schedule Follow-up
-                               │
-                               ▼
-                     Generate Gmail Draft
-                               │
-                               ▼
-                    Telegram Notification
-                               │
-                               ▼
-                     CRM Dashboard
-                               │
-                               ▼
-                    AI Business Insights
-                               │
-                               ▼
-                     AI CRM Copilot
-```
+The Copilot retrieves CRM records and AI-generated insights before responding.
 
 ---
 
@@ -129,18 +151,18 @@ Update Record         Create CRM Entry
 | Technology | Purpose |
 |------------|---------|
 | n8n | Workflow Automation |
-| Gemini 2.0 Flash | AI Lead Analysis & Insights |
+| Gemini 2.0 Flash | AI Analysis |
 | Gmail API | Email Automation |
 | Google Sheets | CRM Database |
 | Telegram Bot API | Notifications |
+| Structured Output Parser | AI Data Formatting |
 | JSON | Workflow Export |
-| Google Workspace | Dashboard & Reporting |
 
 ---
 
-# 📂 Repository Structure
+# 📂 Project Structure
 
-```
+```text
 FreelanceOS-AI-CRM-v2
 │
 ├── assets/
@@ -157,83 +179,15 @@ FreelanceOS-AI-CRM-v2
 
 ---
 
-# 📸 Screenshots
+# ⚙️ Workflow Architecture
 
-## AI Lead Processing Pipeline
+## 📥 AI Lead Processing
 
-New Lead Processing
-
-![Lead Pipeline](assets/AI%20Lead%20Processing%20Pipeline%20v2.png)
-
-Existing Lead Detection
-
-![Duplicate Pipeline](assets/AI%20Lead%20Processing%20Pipeline%20v2.2.png)
-
----
-
-## AI Follow-up Automation
-
-![Follow-up](assets/AI%20Follow-up%20Automation.png)
-
----
-
-## Gmail Draft Generation
-
-![Draft](assets/GMAIL%20DRAFT.png)
-
----
-
-## Telegram Alerts
-
-![Telegram](assets/Telegram%20Alerts.png)
-
----
-
-## AI Dashboard
-
-![Dashboard](assets/📊AI%20Dashboard%20%26%20Business%20Insights%20v2.png)
-
----
-
-## Dashboard Sheet
-
-![Dashboard Sheet](assets/Dashboard%20sheet.png)
-
----
-
-## AI Insights Sheet
-
-![Insights](assets/AI%20Insights%20sheet.png)
-
----
-
-## AI CRM Copilot
-
-Workflow
-
-![Copilot](assets/🤖FreelanceOS%20AI%20Copilot%20(RAG).png)
-
----
-
-Chat Examples
-
-![Chat1](assets/CRM%20AI%20CHAT1.png)
-
-![Chat2](assets/CRM%20AI%20CHAT2.png)
-
-![Chat3](assets/CRM%20AI%20CHAT3.png)
-
----
-
-# 🚀 Workflow Summary
-
-### AI Lead Processing
-
-Incoming Email
+Incoming Gmail
 
 ↓
 
-AI Analysis
+Gemini AI Analysis
 
 ↓
 
@@ -241,7 +195,7 @@ Duplicate Detection
 
 ↓
 
-CRM Update / New Entry
+Update Existing Lead / Create New Lead
 
 ↓
 
@@ -249,7 +203,7 @@ Schedule Follow-up
 
 ↓
 
-Generate Draft
+Generate Gmail Draft
 
 ↓
 
@@ -257,13 +211,17 @@ Telegram Notification
 
 ---
 
-### AI Follow-up
+## 📅 AI Follow-up
 
 Daily Scheduler
 
 ↓
 
-Check Due Date
+Pending Follow-ups
+
+↓
+
+Due Date Verification
 
 ↓
 
@@ -271,39 +229,51 @@ Generate Gmail Draft
 
 ↓
 
-Update Follow-up Status
+Update Status
 
 ---
 
-### AI Dashboard
+## 📊 AI Dashboard
 
 Read CRM
 
 ↓
 
-Generate Business Metrics
+Generate Metrics
 
 ↓
 
-AI Executive Summary
+Gemini AI
 
 ↓
 
-Store Insights
+Executive Summary
+
+↓
+
+Store AI Insights
 
 ---
 
-### AI Copilot
+## 🤖 AI CRM Copilot
 
 User Question
 
 ↓
 
-Retrieve CRM Context
+Retrieve CRM Database
+
+↓
+
+Retrieve Follow-up Database
 
 ↓
 
 Retrieve AI Insights
+
+↓
+
+Combine Context
 
 ↓
 
@@ -315,17 +285,136 @@ Natural Language Response
 
 ---
 
-# 💡 Future Improvements
+# 🚀 Getting Started
 
-- CRM Web Application
-- Voice-enabled AI Assistant
-- WhatsApp Integration
-- Calendar Integration
-- Client Portal
-- Multi-user Authentication
-- PostgreSQL Support
-- Vector Database for Advanced RAG
-- Docker Deployment
+1. Clone this repository.
+
+2. Import all workflow JSON files into n8n.
+
+3. Configure credentials:
+
+- Gmail
+- Gemini API
+- Google Sheets
+- Telegram
+
+4. Update Spreadsheet IDs.
+
+5. Execute the workflows.
+
+---
+
+# 📸 Screenshots
+
+## 📥 AI Lead Processing Pipeline
+
+### New Lead Flow
+
+![New Lead](assets/ai-lead-processing-pipeline-v2.png)
+
+### Existing Lead Detection
+
+![Duplicate Lead](assets/ai-lead-processing-pipeline-existing-lead.png)
+
+---
+
+## 📅 AI Follow-up Automation
+
+![Follow-up Automation](assets/ai-follow-up-automation.png)
+
+---
+
+## ✉️ Gmail Draft Generation
+
+![Gmail Draft](assets/gmail-draft.png)
+
+---
+
+## 📲 Telegram Notifications
+
+![Telegram](assets/telegram-alerts.png)
+
+---
+
+## 📊 AI Dashboard & Business Insights
+
+![Dashboard Workflow](assets/ai-dashboard-business-insights-v2.png)
+
+---
+
+## 📈 CRM Dashboard
+
+![Dashboard Sheet](assets/dashboard-sheet.png)
+
+---
+
+## 🧠 AI Insights Sheet
+
+![AI Insights](assets/ai-insights-sheet.png)
+
+---
+
+## 🤖 AI CRM Copilot (RAG)
+
+### Workflow
+
+![AI Copilot](assets/freelanceos-ai-copilot-rag.png)
+
+### Chat Example 1
+
+![Chat 1](assets/crm-ai-chat-1.png)
+
+### Chat Example 2
+
+![Chat 2](assets/crm-ai-chat-2.png)
+
+### Chat Example 3
+
+![Chat 3](assets/crm-ai-chat-3.png)
+
+---
+
+# 🎯 Key Achievements
+
+✅ Four integrated AI workflows
+
+✅ Duplicate lead detection
+
+✅ Automated follow-up management
+
+✅ AI-generated Gmail drafts
+
+✅ Telegram notifications
+
+✅ Executive business insights
+
+✅ Natural language CRM assistant (RAG)
+
+✅ Google Sheets CRM dashboard
+
+---
+
+# 👩‍💻 Author
+
+## Akshaya V
+
+Computer Science Undergraduate
+
+Interested in:
+
+- Artificial Intelligence
+- Workflow Automation
+- Full Stack Development
+- AI Agents
+- CRM Automation
+
+**GitHub**
+
+https://github.com/akshayav316
+
+**LinkedIn**
+
+https://www.linkedin.com/in/akshaya-v-0199233ab/
 
 ---
 
@@ -335,18 +424,4 @@ This project is licensed under the MIT License.
 
 ---
 
-# 👩‍💻 Author
-
-**Akshaya V**
-
-Computer Science Undergraduate
-
-Passionate about AI, Automation, Full Stack Development, and Workflow Engineering.
-
-GitHub: https://github.com/akshayav316
-
-LinkedIn: https://www.linkedin.com/in/akshaya-v-0199233ab/
-
----
-
-⭐ If you found this project useful, consider giving it a star!
+⭐ **If you found this project interesting, consider giving it a star!**
