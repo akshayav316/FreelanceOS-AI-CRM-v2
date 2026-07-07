@@ -173,6 +173,17 @@ This project demonstrates several real-world software engineering and AI enginee
 - **Workflow Orchestration** – Coordinates multiple interconnected automation pipelines for seamless lead management.
 - **Data Persistence** – Stores and manages CRM data, follow-up schedules, and AI insights using Google Sheets.
 
+- # 🎯 Project Highlights
+
+- 🚀 Built **4 interconnected AI automation workflows** using n8n.
+- 🤖 Integrated **Gemini 2.0 Flash** for intelligent lead analysis, CRM insights, and conversational assistance.
+- 📩 Automated end-to-end client lead processing from Gmail to CRM.
+- 🔍 Implemented duplicate lead detection to maintain clean CRM records.
+- 📅 Designed a fully automated follow-up management system with scheduled Gmail draft generation.
+- 📊 Built an AI-powered CRM dashboard with executive summaries, lead analytics, and business insights.
+- 💬 Developed a Retrieval-Augmented Generation (RAG) CRM Copilot capable of answering natural language business queries.
+- 📲 Added Telegram notifications for real-time workflow updates and monitoring.
+
 # 📂 Project Structure
 
 ```text
