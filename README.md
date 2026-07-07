@@ -160,6 +160,17 @@ The Copilot retrieves CRM records and AI-generated insights before responding.
 
 ---
 
+## Key Engineering Concepts
+
+- Event-driven workflow automation
+- API integrations
+- AI-powered data processing
+- Structured data extraction
+- Retrieval-Augmented Generation (RAG)
+- Duplicate detection logic
+- Automated scheduling
+- Business analytics generation
+
 # 📂 Project Structure
 
 ```text
