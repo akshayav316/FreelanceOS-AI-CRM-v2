@@ -1,0 +1,394 @@
+{
+  "name": "📬 AI Follow-up Automation",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        16
+      ],
+      "id": "fd818d27-c334-4e7d-a976-2026dc7504d6",
+      "name": "⏰ Daily Follow-up Scheduler"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1GbiHGlC995XEgVfk1aLuUotVbA6KuLHOTNNYcguhb2U",
+          "mode": "list",
+          "cachedResultName": "FreelanceOS CRM",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1GbiHGlC995XEgVfk1aLuUotVbA6KuLHOTNNYcguhb2U/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1724776003,
+          "mode": "list",
+          "cachedResultName": "Followups",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1GbiHGlC995XEgVfk1aLuUotVbA6KuLHOTNNYcguhb2U/edit#gid=1724776003"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        192,
+        16
+      ],
+      "id": "6f53b8b3-45ff-4020-a88e-9af6c7fad780",
+      "name": "📋 Fetch Follow-up Tasks",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "sLe12pksa7ZjD3kw",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "5d6523fa-2bb5-4711-a162-9bb9a15e3f58",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "Pending",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        384,
+        16
+      ],
+      "id": "c8485d45-52e6-4a9c-9054-941262fcb10a",
+      "name": "📅 Follow-up Due Today?"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "047348d0-01b9-4a9a-a27b-2dc3444e769d",
+              "leftValue": "={{ $json.follow_up_date }}",
+              "rightValue": "={{ $now.toFormat('yyyy-MM-dd') }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        544,
+        -144
+      ],
+      "id": "97990885-8bc0-421d-be5d-d0ff6f62177b",
+      "name": "✉️ Draft Required?"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1GbiHGlC995XEgVfk1aLuUotVbA6KuLHOTNNYcguhb2U",
+          "mode": "list",
+          "cachedResultName": "FreelanceOS CRM",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1GbiHGlC995XEgVfk1aLuUotVbA6KuLHOTNNYcguhb2U/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1724776003,
+          "mode": "list",
+          "cachedResultName": "Followups",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1GbiHGlC995XEgVfk1aLuUotVbA6KuLHOTNNYcguhb2U/edit#gid=1724776003"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": "={{ $json.row_number }}",
+            "client_name": "={{ $json.client_name }}",
+            "email": "={{ $json.email }}",
+            "follow_up_date": "={{ $json.follow_up_date }}",
+            "status": "=Draft Created",
+            "lead_temperature": "={{ $json.lead_temperature }}",
+            "reply_email": "={{ $json.reply_email }}"
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "client_name",
+              "displayName": "client_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "follow_up_date",
+              "displayName": "follow_up_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "business_opportunity_score",
+              "displayName": "business_opportunity_score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "lead_temperature",
+              "displayName": "lead_temperature",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "reply_email",
+              "displayName": "reply_email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1040,
+        96
+      ],
+      "id": "f466ce45-52de-456d-947a-f8bf031e338f",
+      "name": "✅ Update Follow-up Status",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "sLe12pksa7ZjD3kw",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "📬 Workflow Purpose\n\n• Runs automatically every day\n• Checks pending follow-ups\n• Verifies due date\n• Generates Gmail draft\n• Updates follow-up status\n\n",
+        "height": 208,
+        "width": 336
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        80,
+        -240
+      ],
+      "id": "f0771069-7369-4327-8149-9f7bc125e48e",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        864,
+        96
+      ],
+      "id": "ee72f54f-fc71-472a-af0c-7fc3bff653d8",
+      "name": "🔄 Combine Execution Results"
+    },
+    {
+      "parameters": {
+        "resource": "draft",
+        "subject": "={{ \"Follow-up for \" + $json.client_name }}",
+        "message": "={{ $json.email }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        800,
+        -160
+      ],
+      "id": "1fae18b2-8e72-4fda-9d4b-f27acae7ecd5",
+      "name": "📧 Create Reply Draft",
+      "webhookId": "d77e1ef3-67ae-4045-912d-536494f651d4",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "qJbvLgKXx2P2IpEW",
+          "name": "Gmail OAuth2 API"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "⏰ Daily Follow-up Scheduler": {
+      "main": [
+        [
+          {
+            "node": "📋 Fetch Follow-up Tasks",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "📋 Fetch Follow-up Tasks": {
+      "main": [
+        [
+          {
+            "node": "📅 Follow-up Due Today?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "📅 Follow-up Due Today?": {
+      "main": [
+        [
+          {
+            "node": "✉️ Draft Required?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "✉️ Draft Required?": {
+      "main": [
+        [
+          {
+            "node": "📧 Create Reply Draft",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "🔄 Combine Execution Results",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "🔄 Combine Execution Results": {
+      "main": [
+        [
+          {
+            "node": "✅ Update Follow-up Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "📧 Create Reply Draft": {
+      "main": [
+        [
+          {
+            "node": "🔄 Combine Execution Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "d5c62b3f-9869-4af3-94ec-c74f84d56ba5",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e65cf5f67bbb0aec2d94ac6f3de175c43bccf7611296de42e7899e0c9b84e6b2"
+  },
+  "nodeGroups": [],
+  "id": "6JbuargUJWELNdpw",
+  "tags": []
+}

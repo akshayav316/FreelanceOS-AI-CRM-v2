@@ -1,0 +1,356 @@
+{
+  "name": "📊AI Dashboard & Business Insights v2",
+  "nodes": [
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1GbiHGlC995XEgVfk1aLuUotVbA6KuLHOTNNYcguhb2U",
+          "mode": "list",
+          "cachedResultName": "FreelanceOS CRM",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1GbiHGlC995XEgVfk1aLuUotVbA6KuLHOTNNYcguhb2U/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1GbiHGlC995XEgVfk1aLuUotVbA6KuLHOTNNYcguhb2U/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        160,
+        0
+      ],
+      "id": "aef164f2-e6dd-4b69-a154-358182d8f33b",
+      "name": "📊 CRM Database",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "sLe12pksa7ZjD3kw",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -48,
+        0
+      ],
+      "id": "19246808-35f8-4fdc-bd40-55f0d4069663",
+      "name": "▶️ Generate AI Insights"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get all incoming rows\nconst rows = $input.all().map(item => item.json);\n\n// Convert all rows into one JSON string\nconst crmData = JSON.stringify(rows, null, 2);\n\n// Return a single item containing all CRM data\nreturn [\n  {\n    json: {\n      total_leads: rows.length,\n      crm_data: crmData\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        352,
+        0
+      ],
+      "id": "d60a0b2d-0916-4307-91f9-44f747fa0100",
+      "name": "🧹 CRM Data Processor "
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an AI CRM Analyst.\n\nAnalyze the CRM data below.\n\nTotal Leads:\n{{ $json.total_leads }}\n\nCRM Data:\n{{ $json.crm_data }}\n\nReturn ONLY a valid JSON object.\n\nRules:\n- Do NOT use markdown.\n- Do NOT wrap the response inside ```json.\n- Do NOT explain anything.\n- Do NOT return any text before or after the JSON.\n- Do NOT return an \"output\" field.\n- Return ONLY the JSON object.\n\nUse exactly this structure:\n\n{\n  \"total_leads\": 0,\n  \"hot_leads\": 0,\n  \"warm_leads\": 0,\n  \"cold_leads\": 0,\n  \"risks\": \"string\",\n  \"executive_summary\": \"string\"\n}\n\nFor \"risks\", combine all major business risks into one string.\n\nFor \"executive_summary\", return one concise paragraph.\n\nReturn only valid JSON.",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        544,
+        0
+      ],
+      "id": "768ca177-2e22-404c-b2e3-b3cf3f3a210b",
+      "name": "🧠 AI Insights Engine"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"total_leads\": 0,\n  \"hot_leads\": 0,\n  \"warm_leads\": 0,\n  \"cold_leads\": 0,\n  \"risks\": \"\",\n  \"executive_summary\": \"\"\n}",
+        "autoFix": true
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        720,
+        160
+      ],
+      "id": "71ca929e-4f16-4536-8556-b3383958428b",
+      "name": "📄 AI Output Formatter "
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1GbiHGlC995XEgVfk1aLuUotVbA6KuLHOTNNYcguhb2U",
+          "mode": "list",
+          "cachedResultName": "FreelanceOS CRM",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1GbiHGlC995XEgVfk1aLuUotVbA6KuLHOTNNYcguhb2U/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 321404955,
+          "mode": "list",
+          "cachedResultName": "AI Insights",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1GbiHGlC995XEgVfk1aLuUotVbA6KuLHOTNNYcguhb2U/edit#gid=321404955"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Date": "={{$now}}",
+            "Total Leads": "={{$node[\"🧹 CRM Data Processor \"].json.total_leads}}",
+            "Executive Summary": "={{ $json.output.executive_summary }}",
+            "Hot Leads": "={{ $json.output.hot_leads }}",
+            "Risks": "={{ $json.output.risks }}",
+            "Warm Leads": "={{ $json.output.warm_leads }}",
+            "Cold Leads": "={{ $json.output.cold_leads }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Total Leads",
+              "displayName": "Total Leads",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Hot Leads",
+              "displayName": "Hot Leads",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Warm Leads",
+              "displayName": "Warm Leads",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Cold Leads",
+              "displayName": "Cold Leads",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Risks",
+              "displayName": "Risks",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Executive Summary",
+              "displayName": "Executive Summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        896,
+        0
+      ],
+      "id": "bc86509f-4f44-419b-ae0d-cd0f11334e2e",
+      "name": "💾 Store AI Insights ",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "sLe12pksa7ZjD3kw",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        496,
+        176
+      ],
+      "id": "7a437cde-a345-46e1-810f-ee401885faf4",
+      "name": "Gemini 2.0 Flash",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "toca7gWuzAz7phcH",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        672,
+        304
+      ],
+      "id": "b3edfc2b-c144-4de1-b077-9a24160e1dc8",
+      "name": "Gemini 2.0 Flashh",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "toca7gWuzAz7phcH",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "📊 Workflow Purpose\n\n• Reads CRM data\n• Calculates business metrics\n• Generates executive summaries\n• Identifies risks & opportunities\n• Saves AI insights to Google Sheets",
+        "height": 176,
+        "width": 320
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        96,
+        160
+      ],
+      "id": "4fd22949-2d71-4ab9-9325-0aa7de540f56",
+      "name": "Sticky Note"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "📊 CRM Database": {
+      "main": [
+        [
+          {
+            "node": "🧹 CRM Data Processor ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "▶️ Generate AI Insights": {
+      "main": [
+        [
+          {
+            "node": "📊 CRM Database",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "🧹 CRM Data Processor ": {
+      "main": [
+        [
+          {
+            "node": "🧠 AI Insights Engine",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "🧠 AI Insights Engine": {
+      "main": [
+        [
+          {
+            "node": "💾 Store AI Insights ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "📄 AI Output Formatter ": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "🧠 AI Insights Engine",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini 2.0 Flash": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "🧠 AI Insights Engine",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini 2.0 Flashh": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "📄 AI Output Formatter ",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "88931d9e-6b67-4201-a14d-6665d80cdbfa",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e65cf5f67bbb0aec2d94ac6f3de175c43bccf7611296de42e7899e0c9b84e6b2"
+  },
+  "nodeGroups": [],
+  "id": "Si7VLXqJtPrM2bwH",
+  "tags": []
+}

@@ -1,0 +1,1212 @@
+{
+  "name": ":  📩AI Lead Processing Pipeline v2",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "filters": {}
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -96,
+        0
+      ],
+      "id": "d796074d-b013-4df8-bcc9-13172d58828f",
+      "name": "📧 Gmail Trigger",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "qJbvLgKXx2P2IpEW",
+          "name": "Gmail OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "📩 Workflow Purpose\n\n• Detect new Gmail inquiries\n• Prevent duplicate CRM entries\n• Analyze lead quality with AI\n• Schedule follow-ups\n• Generate reply drafts\n• Notify via Telegram",
+        "height": 224,
+        "width": 368
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -32,
+        -272
+      ],
+      "id": "d68cddbe-58d5-414c-a5d5-455b6565e70c",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are FreelanceOS, an AI assistant for freelance developers and designers.\n\nAnalyze the email below and return ONLY valid JSON matching the Structured Output Parser.\n\nEmail Information\n\nSubject:\n{{ $json.Subject }}\n\nFrom:\n{{ $json.From }}\n\nEmail:\n{{ $json.snippet }}\n\n--------------------------------------------------\nTASKS\n--------------------------------------------------\n\n1. Extract ONLY the sender's display name from the \"From\" field.\n\nExample:\nAkshaya <akshaya.venkatesh28@gmail.com>\n\nReturn:\n\"client_name\": \"Akshaya\"\n\nIf unavailable, return an empty string.\n\n--------------------------------------------------\n\n2. Extract ONLY the sender's email address from the \"From\" field.\n\nReturn only the email address.\n\nExample:\n\nAkshaya <akshaya.venkatesh28@gmail.com>\n\nReturn:\n\"email\": \"akshaya.venkatesh28@gmail.com\"\n\n--------------------------------------------------\n\n3. Extract the client's role or designation if mentioned.\n\nExamples:\nFounder\nCEO\nHR Manager\nMarketing Lead\nCTO\nProduct Manager\n\nIf not mentioned:\n\n\"client_role\": \"\"\n\n--------------------------------------------------\n\n4. Extract the company or organization name if mentioned.\n\nExamples:\nGoogle\nFitPulse\nBrightWave Solutions\nAcme Inc.\n\nIf unavailable:\n\n\"company_name\": \"\"\n\n--------------------------------------------------\n\n5. Categorize the email as exactly one of:\n\n- New Lead\n- Existing Client\n- Payment\n- Follow-up\n- Support\n- Proposal\n- Meeting\n- Marketing\n- Other\n\n--------------------------------------------------\n\n6. Assign Priority:\n\n- Low\n- Medium\n- High\n\n--------------------------------------------------\n\n7. Summarize the email in one concise sentence.\n\n--------------------------------------------------\n\n8. Identify the project type.\n\nExamples:\n\nWebsite Development\nMobile Application\nAI Automation\nCRM Development\nUI/UX Design\nE-commerce Website\nConsultation\nPortfolio Website\nOther\n\n--------------------------------------------------\n\n9. Identify the primary service requested.\n\nExamples:\n\nWebsite Development\nAI Chatbot\nAutomation\nFull Stack Development\nMobile App\nLanding Page\nAPI Integration\nUI/UX Design\n\nIf unknown:\n\n\"services_requested\": \"\"\n\n--------------------------------------------------\n\n10. Extract the client's budget if mentioned.\n\nExamples:\n\n\"$5000\"\n\"$2,000-$4,000\"\n\nIf unavailable:\n\n\"budget\": \"\"\n\n--------------------------------------------------\n\n11. Extract the expected project timeline if mentioned.\n\nExamples:\n\n2 weeks\n1 month\nASAP\nBefore August\n\nIf unavailable:\n\n\"timeline\": \"\"\n\n--------------------------------------------------\n\n12. Determine whether the sender is requesting a meeting or call.\n\nReturn:\n\ntrue\n\nor\n\nfalse\n\n--------------------------------------------------\n\n13. Detect sentiment.\n\nReturn exactly one:\n\nPositive\nNeutral\nNegative\nUrgent\n\n--------------------------------------------------\n\n14. Assign a Business Opportunity Score from 0 to 100.\n\nScoring Guide:\n\n90–100\nHigh-value client with clear requirements and budget.\n\n70–89\nStrong potential project.\n\n40–69\nModerate opportunity.\n\n0–39\nLow opportunity.\n\n--------------------------------------------------\n\n15. Determine whether follow-up is required.\n\nReturn:\n\ntrue\n\nor\n\nfalse\n\n--------------------------------------------------\n\n16. Suggest follow-up days.\n\nExamples:\n\n1\n2\n3\n5\n7\n\n--------------------------------------------------\n\n17. Determine Lead Temperature.\n\nBusiness Opportunity Score\n\n90–100 → Hot\n\n70–89 → Warm\n\n0–69 → Cold\n\nReturn exactly:\n\nHot\nWarm\nCold\n\n--------------------------------------------------\n\n18. Generate a professional email reply.\n\nRules:\n\n• Write naturally like an experienced freelancer.\n\n• Answer the client's request.\n\n• Ask relevant follow-up questions if information is missing.\n\n• Keep the reply professional and friendly.\n\n• Ready to save as a Gmail draft.\n\n• Do NOT include a subject line.\n\n• Do NOT use Markdown.\n\nEnd with:\n\nBest,\nAkshaya\n\n--------------------------------------------------\n\n19. Generate a reply subject.\n\nExample:\n\nRe: Website Development Inquiry\n\nor\n\nRe: Mobile App Project\n\nFor automated emails return:\n\n\"\"\n\n--------------------------------------------------\n\n20. Determine the next action.\n\nExamples:\n\nSchedule Discovery Call\n\nSend Proposal\n\nRequest More Details\n\nFollow Up in 2 Days\n\nSend Portfolio\n\nArchive Lead\n\n--------------------------------------------------\n\nIMPORTANT RULES\n\nIf the email is an automated notification\n(Google, GitHub, LinkedIn, Microsoft, Stripe, PayPal, Amazon, OTP, newsletters, receipts, invoices, security alerts, verification emails, promotional emails)\n\nthen:\n\nreply_email = \"\"\n\nreply_subject = \"\"\n\nbusiness_opportunity_score = 0\n\nlead_temperature = \"Cold\"\n\nfollow_up_required = false\n\nnext_action = \"Archive Lead\"\n\nReturn ONLY valid JSON matching the Structured Output Parser.\n\nDo NOT return explanations.\n\nDo NOT wrap the JSON inside markdown.",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        96,
+        0
+      ],
+      "id": "53e24486-7d32-4879-8ae1-a9f549c5f6ab",
+      "name": "🤖 AI Lead Analyzer "
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1GbiHGlC995XEgVfk1aLuUotVbA6KuLHOTNNYcguhb2U",
+          "mode": "list",
+          "cachedResultName": "FreelanceOS CRM",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1GbiHGlC995XEgVfk1aLuUotVbA6KuLHOTNNYcguhb2U/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1GbiHGlC995XEgVfk1aLuUotVbA6KuLHOTNNYcguhb2U/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "email",
+              "lookupValue": "={{ $('🤖 AI Lead Analyzer ').item.json.output.email }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        512,
+        -208
+      ],
+      "id": "1127b5bc-3431-40b2-88f7-b37897de4d67",
+      "name": "🔎 Duplicate Lead Check ",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "sLe12pksa7ZjD3kw",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "a3e3d1fe-c8db-48bd-ad75-e3127d2cbf53",
+              "leftValue": "={{ Object.keys($json).length }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        736,
+        -208
+      ],
+      "id": "44fdda0d-f1df-4694-b545-9e2f565607f5",
+      "name": "🔀 Duplicate Found? "
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1GbiHGlC995XEgVfk1aLuUotVbA6KuLHOTNNYcguhb2U",
+          "mode": "list",
+          "cachedResultName": "FreelanceOS CRM",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1GbiHGlC995XEgVfk1aLuUotVbA6KuLHOTNNYcguhb2U/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1GbiHGlC995XEgVfk1aLuUotVbA6KuLHOTNNYcguhb2U/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "client_name": "={{ $json.client_name }}",
+            "email": "={{ $json.email }}",
+            "category": "={{ $json.category }}",
+            "priority": "={{ $json.priority }}",
+            "summary": "={{ $json.summary }}",
+            "project_type": "={{ $json.project_type }}",
+            "sentiment": "={{ $json.sentiment }}",
+            "business_opportunity_score": "={{ $json.business_opportunity_score }}",
+            "lead_temperature": "={{ $json.lead_temperature }}",
+            "follow_up_required": "={{ $json.follow_up_required }}",
+            "follow_up_days": "={{ $json.follow_up_days }}",
+            "reply_email": "={{ $json.reply_email }}",
+            "status": "={{ $json.status }}",
+            "client_role": "={{ $json.client_role }}",
+            "company_name": "={{ $json.company_name }}",
+            "services_requested": "={{ $json.services_requested }}",
+            "budget": "={{ $json.budget }}",
+            "timeline": "={{ $json.timeline }}",
+            "meeting_requested": "={{ $json.meeting_requested }}",
+            "reply_subject": "={{ $json.reply_email }}",
+            "next_action": "={{ $json.next_action }}",
+            "created_date": "={{ $json.created_date }}",
+            "created_time": "={{ $json.created_time }}",
+            "follow_up_date": "={{ $json.follow_up_date }}",
+            "notes": "={{ $json.notes }}",
+            "source": "={{ $json.source }}"
+          },
+          "matchingColumns": [
+            "email"
+          ],
+          "schema": [
+            {
+              "id": "client_name",
+              "displayName": "client_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "category",
+              "displayName": "category",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "priority",
+              "displayName": "priority",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "summary",
+              "displayName": "summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "project_type",
+              "displayName": "project_type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "sentiment",
+              "displayName": "sentiment",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "business_opportunity_score",
+              "displayName": "business_opportunity_score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "lead_temperature",
+              "displayName": "lead_temperature",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "follow_up_required",
+              "displayName": "follow_up_required",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "follow_up_days",
+              "displayName": "follow_up_days",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "client_role",
+              "displayName": "client_role",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "company_name",
+              "displayName": "company_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "services_requested",
+              "displayName": "services_requested",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "budget",
+              "displayName": "budget",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "timeline",
+              "displayName": "timeline",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "meeting_requested",
+              "displayName": "meeting_requested",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "reply_subject",
+              "displayName": "reply_subject",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "reply_email",
+              "displayName": "reply_email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "next_action",
+              "displayName": "next_action",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "created_date",
+              "displayName": "created_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "created_time",
+              "displayName": "created_time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "follow_up_date",
+              "displayName": "follow_up_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "source",
+              "displayName": "source",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "notes",
+              "displayName": "notes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        992,
+        -224
+      ],
+      "id": "528926da-da4e-4d7d-82a0-e49d8b36741f",
+      "name": "🔄 Update Existing Lead ",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "sLe12pksa7ZjD3kw",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        560,
+        144
+      ],
+      "id": "4834f773-c6a7-48fd-b396-af9aea50832b",
+      "name": "🔀 Merge Lead Data"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1GbiHGlC995XEgVfk1aLuUotVbA6KuLHOTNNYcguhb2U",
+          "mode": "list",
+          "cachedResultName": "FreelanceOS CRM",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1GbiHGlC995XEgVfk1aLuUotVbA6KuLHOTNNYcguhb2U/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1GbiHGlC995XEgVfk1aLuUotVbA6KuLHOTNNYcguhb2U/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "client_name": "={{ $json.output.client_name }}",
+            "category": "={{ $json.output.category }}",
+            "priority": "={{ $json.output.priority }}",
+            "summary": "={{ $json.output.summary }}",
+            "project_type": "={{ $json.output.project_type }}",
+            "sentiment": "={{ $json.output.sentiment }}",
+            "business_opportunity_score": "={{ $json.output.business_opportunity_score }}",
+            "follow_up_required": "={{ $json.output.follow_up_required }}",
+            "follow_up_days": "={{ $json.output.follow_up_days }}",
+            "reply_email": "={{ $json.output.reply_email }}",
+            "lead_temperature": "={{ $json.output.lead_temperature }}",
+            "status": "={{ \"Pending\" }}",
+            "email": "={{ $json.output.email }}",
+            "client_role": "={{ $json.output.client_role }}",
+            "company_name": "={{ $json.output.company_name }}",
+            "services_requested": "={{ $json.output.services_requested }}",
+            "budget": "={{ $json.output.budget }}",
+            "timeline": "={{ $json.output.timeline }}",
+            "meeting_requested": "={{ $json.output.meeting_requested }}",
+            "reply_subject": "={{ $json.output.reply_subject }}",
+            "next_action": "={{ $json.output.next_action }}",
+            "created_date": "={{ DateTime.now().toISODate() }}",
+            "created_time": "={{ DateTime.now().toFormat('hh:mm a') }}",
+            "follow_up_date": "={{ DateTime.now().plus({ days: $json.output.follow_up_days }).toISODate() }}",
+            "source": "={{ \"Gmail\" }}",
+            "notes": "={{ \"\" }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "client_name",
+              "displayName": "client_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "category",
+              "displayName": "category",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "priority",
+              "displayName": "priority",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "summary",
+              "displayName": "summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "project_type",
+              "displayName": "project_type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "sentiment",
+              "displayName": "sentiment",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "business_opportunity_score",
+              "displayName": "business_opportunity_score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "lead_temperature",
+              "displayName": "lead_temperature",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "follow_up_required",
+              "displayName": "follow_up_required",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "follow_up_days",
+              "displayName": "follow_up_days",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "client_role",
+              "displayName": "client_role",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "company_name",
+              "displayName": "company_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "services_requested",
+              "displayName": "services_requested",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "budget",
+              "displayName": "budget",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "timeline",
+              "displayName": "timeline",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "meeting_requested",
+              "displayName": "meeting_requested",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "reply_subject",
+              "displayName": "reply_subject",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "reply_email",
+              "displayName": "reply_email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "next_action",
+              "displayName": "next_action",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "created_date",
+              "displayName": "created_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "created_time",
+              "displayName": "created_time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "follow_up_date",
+              "displayName": "follow_up_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "source",
+              "displayName": "source",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "notes",
+              "displayName": "notes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        768,
+        144
+      ],
+      "id": "f2386da2-6d93-47ab-883c-4649796f660b",
+      "name": "➕ Add New Lead ",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "sLe12pksa7ZjD3kw",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1GbiHGlC995XEgVfk1aLuUotVbA6KuLHOTNNYcguhb2U",
+          "mode": "list",
+          "cachedResultName": "FreelanceOS CRM",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1GbiHGlC995XEgVfk1aLuUotVbA6KuLHOTNNYcguhb2U/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1724776003,
+          "mode": "list",
+          "cachedResultName": "Followups",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1GbiHGlC995XEgVfk1aLuUotVbA6KuLHOTNNYcguhb2U/edit#gid=1724776003"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "email": "={{ $('📧 Gmail Trigger').item.json.From }}",
+            "follow_up_date": "={{ DateTime.now().plus({ days: $('🤖 AI Lead Analyzer ').item.json.output.follow_up_days }).toISODate() }}",
+            "status": "={{ \"Pending\" }}",
+            "business_opportunity_score": "={{ $('🤖 AI Lead Analyzer ').item.json.output.business_opportunity_score }}",
+            "lead_temperature": "={{\n$('🤖 AI Lead Analyzer ').item.json.output.business_opportunity_score >= 80\n? 'Hot'\n: $('🤖 AI Lead Analyzer ').item.json.output.business_opportunity_score >= 60\n? 'Warm'\n: 'Cold'\n}}",
+            "reply_email": "={{ $('🤖 AI Lead Analyzer ').item.json.output.reply_email }}",
+            "Client_name": "={{ $json.client_name }}",
+            "company_name": "={{ $json.company_name }}",
+            "client_role": "={{ $json.client_role }}",
+            "follow_up_days": "={{ $json.follow_up_days }}",
+            "priority": "={{ $json.priority }}",
+            "source": "={{ $json.source }}",
+            "notes": "={{ $json.notes }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Client_name",
+              "displayName": "Client_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "company_name",
+              "displayName": "company_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "client_role",
+              "displayName": "client_role",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "follow_up_days",
+              "displayName": "follow_up_days",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "follow_up_date",
+              "displayName": "follow_up_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "priority",
+              "displayName": "priority",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "business_opportunity_score",
+              "displayName": "business_opportunity_score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "lead_temperature",
+              "displayName": "lead_temperature",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "source",
+              "displayName": "source",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "notes",
+              "displayName": "notes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "reply_email",
+              "displayName": "reply_email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        960,
+        144
+      ],
+      "id": "b6b40773-7c03-4c25-93db-b66630e9898b",
+      "name": "📅 Schedule Follow-up ",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "sLe12pksa7ZjD3kw",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "draft",
+        "subject": "={{ $('📧 Gmail Trigger').item.json.Subject }}",
+        "message": "={{ $('🤖 AI Lead Analyzer ').item.json.output.reply_email }}",
+        "options": {
+          "threadId": "={{ $('📧 Gmail Trigger').item.json.threadId }}"
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1152,
+        144
+      ],
+      "id": "eb54ebf1-0efd-4313-90dd-908a952406cd",
+      "name": "✉️ Generate Reply Draft ",
+      "webhookId": "542e74fa-fa3f-47af-94a9-b819bb267d50",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "qJbvLgKXx2P2IpEW",
+          "name": "Gmail OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "8151130323",
+        "text": "🎉 FreelanceOS CRM Test\n\nHello Akshaya!\n\nTelegram notifications are working successfully. 🚀",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1360,
+        144
+      ],
+      "id": "93ffe5e1-50fd-4fe6-a789-8156b5de5868",
+      "name": "🔔 Send Telegram Alert",
+      "webhookId": "05a26671-5726-4baf-9977-92e956baf7d0",
+      "credentials": {
+        "telegramApi": {
+          "id": "U4gvb5aQeoorBEM8",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        48,
+        192
+      ],
+      "id": "b2440473-d0e5-4385-973d-c66902d69dc6",
+      "name": "Gemini 2.0 Flash",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "toca7gWuzAz7phcH",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"client_name\": \"\",\n  \"client_role\": \"\",\n  \"company_name\": \"\",\n  \"email\": \"\",\n\n  \"category\": \"\",\n  \"priority\": \"\",\n\n  \"summary\": \"\",\n  \"project_type\": \"\",\n  \"services_requested\": \"\",\n\n  \"budget\": \"\",\n  \"timeline\": \"\",\n  \"meeting_requested\": false,\n\n  \"sentiment\": \"\",\n\n  \"business_opportunity_score\": 0,\n  \"lead_temperature\": \"\",\n\n  \"follow_up_required\": false,\n  \"follow_up_days\": 0,\n\n  \"reply_subject\": \"\",\n  \"reply_email\": \"\",\n\n  \"next_action\": \"\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        288,
+        192
+      ],
+      "id": "49cf3731-d6f0-4dcd-9275-bd780cd6c8ee",
+      "name": "📄 Structured Output"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "📧 Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "🤖 AI Lead Analyzer ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "🤖 AI Lead Analyzer ": {
+      "main": [
+        [
+          {
+            "node": "🔀 Merge Lead Data",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "🔎 Duplicate Lead Check ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "🔎 Duplicate Lead Check ": {
+      "main": [
+        [
+          {
+            "node": "🔀 Duplicate Found? ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "🔀 Duplicate Found? ": {
+      "main": [
+        [
+          {
+            "node": "🔄 Update Existing Lead ",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "🔀 Merge Lead Data",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "🔄 Update Existing Lead ": {
+      "main": [
+        []
+      ]
+    },
+    "🔀 Merge Lead Data": {
+      "main": [
+        [
+          {
+            "node": "➕ Add New Lead ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "➕ Add New Lead ": {
+      "main": [
+        [
+          {
+            "node": "📅 Schedule Follow-up ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "📅 Schedule Follow-up ": {
+      "main": [
+        [
+          {
+            "node": "✉️ Generate Reply Draft ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "✉️ Generate Reply Draft ": {
+      "main": [
+        [
+          {
+            "node": "🔔 Send Telegram Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "🔔 Send Telegram Alert": {
+      "main": [
+        []
+      ]
+    },
+    "Gemini 2.0 Flash": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "🤖 AI Lead Analyzer ",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "📄 Structured Output": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "🤖 AI Lead Analyzer ",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "d4b1557c-d63e-4fc1-a343-ce4b5717dd8f",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e65cf5f67bbb0aec2d94ac6f3de175c43bccf7611296de42e7899e0c9b84e6b2"
+  },
+  "nodeGroups": [],
+  "id": "Mm9Lv6eNydp1k3rA",
+  "tags": []
+}

@@ -1,0 +1,298 @@
+{
+  "name": "🤖 FreelanceOS AI Copilot (RAG)",
+  "nodes": [
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        16,
+        144
+      ],
+      "id": "3f827139-d2f5-4e9a-b9b5-8ca4893de3f3",
+      "name": "✨ Gemini 2.0 Flash",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "toca7gWuzAz7phcH",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "🤖 Workflow Purpose\n\n• Answers natural language questions\n• Searches CRM leads\n• Retrieves follow-up information\n• Uses business insights\n• Responds with AI-powered answers",
+        "height": 224,
+        "width": 608
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        288,
+        -736
+      ],
+      "id": "65bfc96a-d715-4e8b-ae44-1f61c6a7b54c",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1GbiHGlC995XEgVfk1aLuUotVbA6KuLHOTNNYcguhb2U",
+          "mode": "list",
+          "cachedResultName": "FreelanceOS CRM",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1GbiHGlC995XEgVfk1aLuUotVbA6KuLHOTNNYcguhb2U/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1GbiHGlC995XEgVfk1aLuUotVbA6KuLHOTNNYcguhb2U/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -192,
+        -496
+      ],
+      "id": "c104f7e3-93aa-429a-9617-2d3e9dfb49c7",
+      "name": "📊 CRM Leads Database",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "sLe12pksa7ZjD3kw",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1GbiHGlC995XEgVfk1aLuUotVbA6KuLHOTNNYcguhb2U",
+          "mode": "list",
+          "cachedResultName": "FreelanceOS CRM",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1GbiHGlC995XEgVfk1aLuUotVbA6KuLHOTNNYcguhb2U/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1724776003,
+          "mode": "list",
+          "cachedResultName": "Followups",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1GbiHGlC995XEgVfk1aLuUotVbA6KuLHOTNNYcguhb2U/edit#gid=1724776003"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        80,
+        -496
+      ],
+      "id": "d81e7639-455a-4f4f-875f-64db70d347cf",
+      "name": "📅 Follow-up Database",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "sLe12pksa7ZjD3kw",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1GbiHGlC995XEgVfk1aLuUotVbA6KuLHOTNNYcguhb2U",
+          "mode": "list",
+          "cachedResultName": "FreelanceOS CRM",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1GbiHGlC995XEgVfk1aLuUotVbA6KuLHOTNNYcguhb2U/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 321404955,
+          "mode": "list",
+          "cachedResultName": "AI Insights",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1GbiHGlC995XEgVfk1aLuUotVbA6KuLHOTNNYcguhb2U/edit#gid=321404955"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        384,
+        -480
+      ],
+      "id": "5f3b43fe-a1b1-449e-9509-cba1a1c5915b",
+      "name": "📈 Business Insights",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "sLe12pksa7ZjD3kw",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "numberInputs": 3
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        96,
+        -256
+      ],
+      "id": "6ddf0424-d174-4020-a95f-c52f5d4f8b3e",
+      "name": "🔀 Combine CRM Context"
+    },
+    {
+      "parameters": {
+        "jsCode": "const allItems = $input.all();\n\nconst crmData = [];\nconst followups = [];\nconst aiInsights = [];\n\nfor (const item of allItems) {\n\n  const row = item.json;\n\n  // AI Insights sheet\n  if (\n    row[\"Total Leads\"] !== undefined ||\n    row[\"Hot Leads\"] !== undefined ||\n    row[\"Executive Summary\"] !== undefined\n  ) {\n    aiInsights.push(row);\n  }\n\n  // Followups sheet\n  else if (\n    row.follow_up_date !== undefined &&\n    row.status !== undefined &&\n    row.Client_name !== undefined\n  ) {\n    followups.push(row);\n  }\n\n  // CRM sheet\n  else {\n    crmData.push(row);\n  }\n}\n\nreturn [\n{\njson:{\n\nquestion:\n$(' User Query').first().json.chatInput,\n\ncrm_data: crmData,\n\nfollowups: followups,\n\nai_insights: aiInsights\n\n}\n}\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -192,
+        0
+      ],
+      "id": "a0c08ee7-62e5-4167-8e17-2683659cc645",
+      "name": "🧹 Context Formatter "
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -64,
+        -736
+      ],
+      "id": "6969a469-90f6-4521-8fbf-ba61b4808f83",
+      "name": " User Query",
+      "webhookId": "f4b1c856-8bc6-4604-bfdc-abee7a78a1c4"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are FreelanceOS AI Copilot.\n\nYou are an intelligent CRM assistant.\n\nYou MUST answer ONLY using the data provided below.\n\nYou receive FOUR objects:\n\n1. question\n2. crm_data\n3. followups\n4. ai_insights\n\nRules:\n\n• Never make up information.\n\n• If the answer exists in crm_data, use crm_data.\n\n• If the answer is about follow-ups, dates, pending work, reply status or reminders, use followups.\n\n• If the answer is about totals, hot leads, risks, executive summary, analytics or dashboard metrics, use ai_insights.\n\n• If information exists in multiple datasets, combine them.\n\n• If information is unavailable, reply:\n\n\"I couldn't find that information in the CRM.\"\n\nAlways answer naturally and professionally.\n\nExamples:\n\nQuestion:\nWho has the highest opportunity score?\n\nSearch crm_data and followups.\n\nQuestion:\nWhich clients need follow-up tomorrow?\n\nSearch followups.\n\nQuestion:\nHow many hot leads do I have?\n\nSearch ai_insights first.\nIf unavailable, calculate from crm_data.\n\nQuestion:\nGive me today's CRM summary.\n\nUse ai_insights.\n\n----------------------------\n\nQUESTION\n\n{{ $json.question }}\n\n----------------------------\n\nCRM DATA\n\n{{ JSON.stringify($json.crm_data,null,2) }}\n\n----------------------------\n\nFOLLOWUPS\n\n{{ JSON.stringify($json.followups,null,2) }}\n\n----------------------------\n\nAI INSIGHTS\n\n{{ JSON.stringify($json.ai_insights,null,2) }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        64,
+        0
+      ],
+      "id": "584c1c3a-2f1a-4ee1-bdf4-23623bb1161a",
+      "name": "FreelanceOS AI Copilot"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "✨ Gemini 2.0 Flash": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "FreelanceOS AI Copilot",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "📊 CRM Leads Database": {
+      "main": [
+        [
+          {
+            "node": "🔀 Combine CRM Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "📅 Follow-up Database": {
+      "main": [
+        [
+          {
+            "node": "🔀 Combine CRM Context",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "📈 Business Insights": {
+      "main": [
+        [
+          {
+            "node": "🔀 Combine CRM Context",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "🔀 Combine CRM Context": {
+      "main": [
+        [
+          {
+            "node": "🧹 Context Formatter ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "🧹 Context Formatter ": {
+      "main": [
+        [
+          {
+            "node": "FreelanceOS AI Copilot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    " User Query": {
+      "main": [
+        [
+          {
+            "node": "📊 CRM Leads Database",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "📅 Follow-up Database",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "📈 Business Insights",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "209e38f2-de2a-47a5-85e5-a01c75b8d90b",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e65cf5f67bbb0aec2d94ac6f3de175c43bccf7611296de42e7899e0c9b84e6b2"
+  },
+  "nodeGroups": [],
+  "id": "eSkOIAJHKtOmyHnm",
+  "tags": []
+}
