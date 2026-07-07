@@ -160,16 +160,18 @@ The Copilot retrieves CRM records and AI-generated insights before responding.
 
 ---
 
-## Key Engineering Concepts
+# 🏗️ Key Engineering Concepts
 
-- Event-driven workflow automation
-- API integrations
-- AI-powered data processing
-- Structured data extraction
-- Retrieval-Augmented Generation (RAG)
-- Duplicate detection logic
-- Automated scheduling
-- Business analytics generation
+This project demonstrates several real-world software engineering and AI engineering concepts:
+
+- **Event-Driven Workflow Automation** – Automatically processes incoming Gmail events and scheduled follow-ups.
+- **API Integration** – Integrates Gmail, Google Sheets, Telegram, and Gemini AI through secure APIs.
+- **AI-Powered Data Processing** – Uses Gemini AI to extract structured information from unstructured client emails.
+- **Duplicate Detection Logic** – Prevents redundant CRM entries by identifying existing leads before creating new records.
+- **Business Intelligence Generation** – Aggregates CRM data to generate executive summaries, recommendations, and risk analysis.
+- **Retrieval-Augmented Generation (RAG)** – Combines CRM records, follow-up data, and AI insights to answer natural language queries through the AI CRM Copilot.
+- **Workflow Orchestration** – Coordinates multiple interconnected automation pipelines for seamless lead management.
+- **Data Persistence** – Stores and manages CRM data, follow-up schedules, and AI insights using Google Sheets.
 
 # 📂 Project Structure
 
