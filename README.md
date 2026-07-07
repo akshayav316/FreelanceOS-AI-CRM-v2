@@ -398,15 +398,17 @@ Natural Language Response
 
 ## Akshaya V
 
-Computer Science Undergraduate
+Computer Science Undergraduate passionate about building AI-powered applications, workflow automation, and scalable software solutions.
 
-Interested in:
+Currently expanding my skills in:
 
-- Artificial Intelligence
-- Workflow Automation
-- Full Stack Development
-- AI Agents
-- CRM Automation
+- 🤖 Artificial Intelligence
+- ⚙️ Workflow Automation
+- 💻 Software Development
+- 🌐 Full Stack Development
+- 📊 Backend Systems
+- 📈 Problem Solving & Data Structures (C++)
+- 🚀 Aspiring Software Development Engineer (SDE)
 
 **GitHub**
 
@@ -415,8 +417,6 @@ https://github.com/akshayav316
 **LinkedIn**
 
 https://www.linkedin.com/in/akshaya-v-0199233ab/
-
----
 
 # 📄 License
 
